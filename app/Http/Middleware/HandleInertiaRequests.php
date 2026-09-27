@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Substation;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -38,10 +39,19 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name'),
-            'auth' => [
-                'user' => $request->user(),
-            ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function shareOnce(Request $request): array
+    {
+        return array_merge(parent::shareOnce($request), [
+            'substations' => fn () => Substation::all(['id', 'name'])
+                ->sortBy('name', SORT_NATURAL)
+                ->values(),
+        ]);
     }
 }
