@@ -3,7 +3,6 @@ import {
     SidebarContent,
     SidebarFooter,
     SidebarGroup,
-    SidebarGroupContent,
     SidebarHeader,
     SidebarInput,
     SidebarMenu,
@@ -15,6 +14,7 @@ import { Link, usePage } from '@inertiajs/react';
 import { Label } from './ui/label';
 import { useMemo, useState } from 'react';
 import AppearanceToggleTab from './appearance-tabs';
+import { CreateSubstationDialog } from './create-substation-dialog';
 
 export default function AppSidebar() {
     const { substations } = usePage().props;
@@ -46,8 +46,8 @@ export default function AppSidebar() {
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
-                <SidebarGroup className="py-0">
-                    <SidebarGroupContent className="relative">
+                <div className="flex gap-2">
+                    <div className="relative flex-1">
                         <Label htmlFor="search" className="sr-only">
                             Поиск
                         </Label>
@@ -59,8 +59,9 @@ export default function AppSidebar() {
                             onChange={(e) => setQuery(e.target.value)}
                         />
                         <Search className="pointer-events-none absolute top-1/2 left-2 size-4 -translate-y-1/2 opacity-50 select-none" />
-                    </SidebarGroupContent>
-                </SidebarGroup>
+                    </div>
+                    <CreateSubstationDialog />
+                </div>
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
