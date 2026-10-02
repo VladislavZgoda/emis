@@ -7,5 +7,8 @@ declare module '@inertiajs/core' {
             [key: string]: unknown;
             substations: { id: number; name: string }[];
         };
+        flashDataType: {
+            message?: string;
+        };
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Substation;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class SubstationController extends Controller
 {
@@ -34,7 +35,7 @@ class SubstationController extends Controller
 
         Substation::create($validated);
 
-        return back();
+        return Inertia::flash('message', 'Подстанция успешно создана!')->back();
     }
 
     /**
