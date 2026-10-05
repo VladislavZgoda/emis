@@ -6,6 +6,7 @@ import {
     SidebarHeader,
     SidebarInput,
     SidebarMenu,
+    SidebarMenuAction,
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
@@ -14,7 +15,8 @@ import { Link, usePage } from '@inertiajs/react';
 import { Label } from './ui/label';
 import { useMemo, useState } from 'react';
 import AppearanceToggleTab from './appearance-tabs';
-import { CreateSubstationDialog } from './create-substation-dialog';
+import SubstationFormDialog from './substation-form-dialog';
+import SubstationDeleteDialog from './substation-delete-dialog';
 
 export default function AppSidebar() {
     const { substations } = usePage().props;
@@ -60,7 +62,7 @@ export default function AppSidebar() {
                         />
                         <Search className="pointer-events-none absolute top-1/2 left-2 size-4 -translate-y-1/2 opacity-50 select-none" />
                     </div>
-                    <CreateSubstationDialog />
+                    <SubstationFormDialog />
                 </div>
             </SidebarHeader>
             <SidebarContent>
@@ -79,6 +81,16 @@ export default function AppSidebar() {
                                             {s.name}
                                         </span>
                                     </SidebarMenuButton>
+                                    <SubstationFormDialog
+                                        substation={s}
+                                        trigger={
+                                            <SidebarMenuAction
+                                                className="right-7"
+                                                aria-label="Переименовать ТП"
+                                            />
+                                        }
+                                    />
+                                    <SubstationDeleteDialog id={s.id} />
                                 </SidebarMenuItem>
                             ))
                         ) : (
