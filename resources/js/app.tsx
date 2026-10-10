@@ -6,7 +6,11 @@ import Layout from './layouts/Layout';
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 void createInertiaApp({
-    layout: () => Layout,
+    layout: (name) => {
+        if (name.startsWith('auth/')) return null;
+
+        return Layout;
+    },
     title: (title) => (title ? `${title} - ${appName}` : appName),
     strictMode: true,
     withApp(app) {

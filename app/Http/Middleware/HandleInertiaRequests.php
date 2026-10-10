@@ -48,10 +48,10 @@ class HandleInertiaRequests extends Middleware
      */
     public function shareOnce(Request $request): array
     {
-        return array_merge(parent::shareOnce($request), [
+        return array_merge(parent::shareOnce($request), $request->user() ? [
             'substations' => fn () => Substation::all(['id', 'name'])
                 ->sortBy('name', SORT_NATURAL)
                 ->values(),
-        ]);
+        ] : []);
     }
 }
