@@ -3,6 +3,7 @@ import { Toaster, toast } from '@/components/ui/toast';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import AppSidebar from '@/components/app-siderbar';
 import { usePage, router } from '@inertiajs/react';
+import MainMenu from '@/components/main-menu';
 
 export default function Layout({ children }: PropsWithChildren) {
     const isOpen = usePage().props.sidebarOpen;
@@ -21,8 +22,11 @@ export default function Layout({ children }: PropsWithChildren) {
     return (
         <SidebarProvider defaultOpen={isOpen}>
             <AppSidebar />
-            <main>
-                <SidebarTrigger />
+            <main className="min-w-0 flex-1">
+                <header className="flex items-center gap-2 border-b p-2">
+                    <SidebarTrigger />
+                    <MainMenu />
+                </header>
                 <article>{children}</article>
                 <Toaster />
             </main>
