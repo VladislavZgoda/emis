@@ -38,12 +38,16 @@ export default function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg">
-                            <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                            <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 shrink-0 items-center justify-center rounded-lg">
                                 <Zap className="size-4" />
                             </div>
-                            <div className="leading-none font-medium">
-                                Информационная система управления
-                                энергопотреблением
+                            <div className="grid flex-1 text-left leading-tight">
+                                <span className="truncate font-semibold">
+                                    АСКУЭ
+                                </span>
+                                <span className="text-muted-foreground truncate text-xs">
+                                    Учёт оборудования ТП
+                                </span>
                             </div>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
