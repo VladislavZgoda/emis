@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -44,7 +45,9 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function signIn(?User $user = null)
 {
-    // ..
+    return test()
+        ->actingAs($user ?? User::factory()->create())
+        ->withSession(['logged_in_at' => now()->timestamp]);
 }
