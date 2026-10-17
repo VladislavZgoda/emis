@@ -90,7 +90,7 @@ export default function AppSidebar() {
                                         trigger={
                                             <SidebarMenuAction
                                                 className="right-7"
-                                                aria-label="Переименовать ТП"
+                                                data-testid={`rename-substation-${s.id}`}
                                             />
                                         }
                                     />

@@ -24,7 +24,9 @@ export default function SubstationDeleteDialog({ id }: { id: number }) {
                     render={
                         <AlertDialogTrigger
                             render={
-                                <SidebarMenuAction aria-label="Удалить ТП" />
+                                <SidebarMenuAction
+                                    data-testid={`delete-substation-${id}`}
+                                />
                             }
                         >
                             <SquareX />
