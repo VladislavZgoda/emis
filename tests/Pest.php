@@ -2,6 +2,8 @@
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Pest\Browser\Api\AwaitableWebpage;
+use Pest\Browser\Api\PendingAwaitablePage;
 use Tests\TestCase;
 
 /*
@@ -50,4 +52,15 @@ function signIn(?User $user = null)
     return test()
         ->actingAs($user ?? User::factory()->create())
         ->withSession(['logged_in_at' => now()->timestamp]);
+}
+
+/**
+ * Выполняет вход в систему через браузер.
+ * Принимает УЖЕ СОЗДАННУЮ страницу.
+ */
+function loginThroughBrowser(PendingAwaitablePage $page, User $user, string $password = '12345'): AwaitableWebpage
+{
+    return $page->type('input[name=username]', $user->username)
+        ->type('input[name=password]', $password)
+        ->pressAndWaitFor('Войти', 2);
 }
