@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             [
                 UserSeeder::class,
                 SubstationSeeder::class,
+                BalanceGroupSeeder::class,
             ]
         );
     }
