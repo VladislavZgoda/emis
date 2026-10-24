@@ -14,7 +14,7 @@ export default function MainMenu() {
             <NavigationMenuList>
                 <NavigationMenuItem>
                     <NavigationMenuLink
-                        render={<Link href="" />}
+                        render={<Link href="#" />}
                         className={navigationMenuTriggerStyle()}
                     >
                         Просмотр данных
@@ -22,7 +22,7 @@ export default function MainMenu() {
                 </NavigationMenuItem>
                 <NavigationMenuItem>
                     <NavigationMenuLink
-                        render={<Link href="" />}
+                        render={<Link href="#" />}
                         className={navigationMenuTriggerStyle()}
                     >
                         Сформировать отчёты
