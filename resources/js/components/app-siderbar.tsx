@@ -17,6 +17,7 @@ import { useMemo, useState } from 'react';
 import AppearanceToggleTab from './appearance-tabs';
 import SubstationFormDialog from './substation-form-dialog';
 import SubstationDeleteDialog from './substation-delete-dialog';
+import { show } from '@/routes/substations';
 
 export default function AppSidebar() {
     const { substations } = usePage().props;
@@ -77,7 +78,11 @@ export default function AppSidebar() {
                                 <SidebarMenuItem key={s.id}>
                                     <SidebarMenuButton
                                         render={
-                                            <Link className="font-medium" />
+                                            <Link
+                                                href={show(s.id)}
+                                                prefetch
+                                                className="font-medium"
+                                            />
                                         }
                                     >
                                         <HousePlug />

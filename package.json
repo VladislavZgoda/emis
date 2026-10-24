@@ -19,6 +19,7 @@
         "@inertiajs/vite": "^3.9.1",
         "@shadcn/react": "^0.3.1",
         "@tailwindcss/vite": "^4.3.3",
+        "@tanstack/react-table": "^9.3.1",
         "@types/react": "^19.3.0",
         "@types/react-dom": "^19.3.0",
         "@vitejs/plugin-react": "^6.1.2",
