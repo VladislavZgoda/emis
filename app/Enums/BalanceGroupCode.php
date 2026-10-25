@@ -5,15 +5,19 @@ namespace App\Enums;
 enum BalanceGroupCode: string
 {
     case Household = 'household';
-    case Legal = 'legal';
-    case Odpu = 'odpu';
+    case LegalUspd = 'legal_uspd';
+    case LegalGsm = 'legal_gsm';
+    case OdpuUspd = 'odpu_uspd';
+    case OdpuGsm = 'odpu_gsm';
 
     public function label(): string
     {
         return match ($this) {
             self::Household => 'БЫТ',
-            self::Legal => 'Юридические лица',
-            self::Odpu => 'ОДПУ',
+            self::LegalUspd => 'Юридические лица (УСПД)',
+            self::LegalGsm => 'Юридические лица (GSM-модем)',
+            self::OdpuUspd => 'ОДПУ (УСПД)',
+            self::OdpuGsm => 'ОДПУ (GSM-модем)',
         };
     }
 

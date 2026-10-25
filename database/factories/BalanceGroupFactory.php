@@ -19,7 +19,7 @@ class BalanceGroupFactory extends Factory
     public function definition(): array
     {
         throw new \LogicException(
-            'BalanceGroup — канонический справочник. Используйте household(), legal() или odpu().'
+            'BalanceGroup — канонический справочник. Используйте household(), legalUspd(), legalGsm(), odpuUspd() или odpuGsm().'
         );
     }
 
@@ -31,19 +31,35 @@ class BalanceGroupFactory extends Factory
         ]);
     }
 
-    public function legal(): static
+    public function legalUspd(): static
     {
         return $this->state([
-            'code' => BalanceGroupCode::Legal->value,
-            'name' => BalanceGroupCode::Legal->label(),
+            'code' => BalanceGroupCode::LegalUspd->value,
+            'name' => BalanceGroupCode::LegalUspd->label(),
         ]);
     }
 
-    public function odpu(): static
+    public function legalGsm(): static
     {
         return $this->state([
-            'code' => BalanceGroupCode::Odpu->value,
-            'name' => BalanceGroupCode::Odpu->label(),
+            'code' => BalanceGroupCode::LegalGsm->value,
+            'name' => BalanceGroupCode::LegalGsm->label(),
+        ]);
+    }
+
+    public function odpuUspd(): static
+    {
+        return $this->state([
+            'code' => BalanceGroupCode::OdpuUspd->value,
+            'name' => BalanceGroupCode::OdpuUspd->label(),
+        ]);
+    }
+
+    public function odpuGsm(): static
+    {
+        return $this->state([
+            'code' => BalanceGroupCode::OdpuGsm->value,
+            'name' => BalanceGroupCode::OdpuGsm->label(),
         ]);
     }
 }
