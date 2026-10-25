@@ -69,8 +69,8 @@ class SubstationController extends Controller
 
             return [
                 'balance_group' => $code->label(),
-                'meters_total' => $current?->meters_total ?? $last?->meters_total ?? 0,
-                'meters_installed' => $current?->meters_installed ?? 0,
+                'meters_total' => $current->meters_total ?? $last->meters_total ?? 0,
+                'meters_installed' => $current->meters_installed ?? 0,
             ];
         });
 
