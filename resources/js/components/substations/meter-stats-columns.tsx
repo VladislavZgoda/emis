@@ -10,8 +10,10 @@ export const columns = columnHelper.columns([
     }),
     columnHelper.accessor('meters_total', {
         header: 'Приборов на подстанции',
+        meta: { align: 'right' },
     }),
     columnHelper.accessor('meters_installed', {
         header: 'Установлено за месяц',
+        meta: { align: 'right' },
     }),
 ]);

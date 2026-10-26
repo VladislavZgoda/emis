@@ -32,17 +32,31 @@ const monthItems = months.map((label, i) => ({
 export function PeriodFilter({
     substationId,
     filters,
+    isLoading = false,
+    onLoadingChange,
 }: {
     substationId: number;
     filters: Period;
+    isLoading?: boolean;
+    onLoadingChange?: (loading: boolean) => void;
 }) {
     const update = (key: keyof Period, value: string) => {
         router.get(
             show(substationId),
             { ...filters, [key]: Number(value) },
-            { preserveState: true, preserveScroll: true, replace: true },
+            {
+                only: ['meterStats', 'totals', 'filters'],
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+                onStart: () => onLoadingChange?.(true),
+                onFinish: () => onLoadingChange?.(false),
+            },
         );
     };
+
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: 3 }, (_, i) => currentYear - i);
 
     return (
         <div className="flex gap-2">
@@ -53,6 +67,7 @@ export function PeriodFilter({
                     update('month', v);
                 }}
                 items={monthItems}
+                disabled={isLoading}
             >
                 <SelectTrigger className="w-40">
                     <SelectValue />
@@ -71,6 +86,7 @@ export function PeriodFilter({
                     if (v === null) return;
                     update('year', v);
                 }}
+                disabled={isLoading}
             >
                 <SelectTrigger className="w-28">
                     <SelectValue />
@@ -80,13 +96,11 @@ export function PeriodFilter({
                     side="bottom"
                     className="min-w-0"
                 >
-                    {[filters.year - 1, filters.year, filters.year + 1].map(
-                        (y) => (
-                            <SelectItem key={y} value={String(y)}>
-                                {y}
-                            </SelectItem>
-                        ),
-                    )}
+                    {years.map((y) => (
+                        <SelectItem key={y} value={String(y)}>
+                            {y}
+                        </SelectItem>
+                    ))}
                 </SelectContent>
             </Select>
         </div>
