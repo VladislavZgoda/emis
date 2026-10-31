@@ -69,12 +69,16 @@ export function PeriodFilter({
                 items={monthItems}
                 disabled={isLoading}
             >
-                <SelectTrigger className="w-40">
+                <SelectTrigger className="w-40" data-testid="month-select">
                     <SelectValue />
                 </SelectTrigger>
                 <SelectContent alignItemWithTrigger={false} side="bottom">
                     {monthItems.map((m) => (
-                        <SelectItem key={m.value} value={m.value}>
+                        <SelectItem
+                            key={m.value}
+                            value={m.value}
+                            data-testid={`month-option-${m.value}`}
+                        >
                             {m.label}
                         </SelectItem>
                     ))}
@@ -88,7 +92,7 @@ export function PeriodFilter({
                 }}
                 disabled={isLoading}
             >
-                <SelectTrigger className="w-28">
+                <SelectTrigger className="w-28" data-testid="year-select">
                     <SelectValue />
                 </SelectTrigger>
                 <SelectContent

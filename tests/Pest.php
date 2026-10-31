@@ -1,6 +1,10 @@
 <?php
 
+use App\Enums\BalanceGroupCode;
+use App\Models\Substation;
+use App\Models\SubstationMeterStat;
 use App\Models\User;
+use Database\Seeders\BalanceGroupSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Pest\Browser\Api\AwaitableWebpage;
 use Pest\Browser\Api\PendingAwaitablePage;
@@ -19,7 +23,7 @@ use Tests\TestCase;
 
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
-    ->in('Feature');
+    ->in('Feature', 'Browser');
 
 /*
 |--------------------------------------------------------------------------
@@ -63,4 +67,24 @@ function loginThroughBrowser(PendingAwaitablePage $page, User $user, string $pas
     return $page->type('input[name=username]', $user->username)
         ->type('input[name=password]', $password)
         ->pressAndWaitFor('Войти', 2);
+}
+
+function seedBalanceGroups(): void
+{
+    test()->seed(BalanceGroupSeeder::class);
+}
+
+function addMeterStat(
+    Substation $substation,
+    BalanceGroupCode $code,
+    int $year,
+    int $month,
+    int $total,
+    int $installed = 0,
+): SubstationMeterStat {
+    return SubstationMeterStat::factory()
+        ->for($substation)
+        ->forGroup($code)
+        ->forPeriod($year, $month)
+        ->create(['meters_total' => $total, 'meters_installed' => $installed]);
 }
