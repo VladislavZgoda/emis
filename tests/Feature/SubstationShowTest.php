@@ -6,6 +6,8 @@ use App\Models\Substation;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
+    $this->travelTo(now()->setDate(2026, 12, 15));
+
     seedBalanceGroups();
     signIn();
     $this->substation = Substation::factory()->create(['name' => 'ТП-1']);
@@ -26,7 +28,7 @@ it('renders the page with only id and name of the substation', function () {
 it('uses current month and year by default', function () {
     $this->travelTo(now()->setDate(2026, 3, 15));
 
-    $this->get(route('substations.show', $this->substation))
+    signIn()->get(route('substations.show', $this->substation))
         ->assertInertia(fn (Assert $page) => $page
             ->where('filters.year', 2026)
             ->where('filters.month', 3));
@@ -121,3 +123,45 @@ it('fails loudly when balance groups are not seeded', function () {
 
     $this->get(route('substations.show', $this->substation));
 })->throws(RuntimeException::class);
+
+it('clamps a future month to the current one', function () {
+    $this->travelTo(now()->setDate(2026, 3, 15));
+
+    signIn()->get(route('substations.show', ['substation' => $this->substation, 'year' => 2026, 'month' => 9]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('filters.year', 2026)
+            ->where('filters.month', 3));
+});
+
+it('clamps a future year to the current one', function () {
+    $this->travelTo(now()->setDate(2026, 3, 15));
+
+    signIn()->get(route('substations.show', ['substation' => $this->substation, 'year' => 2030, 'month' => 5]))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('filters.year', 2026)
+            ->where('filters.month', 3));
+});
+
+it('does not reject a year in the future', function () {
+    $this->get(route('substations.show', ['substation' => $this->substation, 'year' => 2099]))
+        ->assertOk()
+        ->assertSessionHasNoErrors();
+});
+
+it('exposes the current period as limits', function () {
+    $this->travelTo(now()->setDate(2026, 3, 15));
+
+    signIn()->get(route('substations.show', $this->substation))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('limits', ['year' => 2026, 'month' => 3]));
+});
+
+it('does not clamp the month for a past year', function () {
+    $this->travelTo(now()->setDate(2026, 3, 15));
+
+    signIn()->get(route('substations.show', ['substation' => $this->substation, 'year' => 2025, 'month' => 12]))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('filters.year', 2025)
+            ->where('filters.month', 12));
+});

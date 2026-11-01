@@ -35,8 +35,13 @@ class SubstationController extends Controller
         Substation $substation,
         BuildSubstationMeterReport $buildReport
     ): Response {
-        $year = $request->integer('year', now()->year);
-        $month = $request->integer('month', now()->month);
+        $now = now();
+        $year = min($request->integer('year', $now->year), $now->year);
+        $month = $request->integer('month', $now->month);
+
+        if ($year === $now->year) {
+            $month = min($month, $now->month);
+        }
 
         $rows = $buildReport($substation, $year, $month);
 
@@ -51,6 +56,7 @@ class SubstationController extends Controller
                 'year' => $year,
                 'month' => $month,
             ],
+            'limits' => ['year' => $now->year, 'month' => $now->month],
         ]);
     }
 

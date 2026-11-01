@@ -22,7 +22,7 @@ class ShowSubstationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'year' => ['sometimes', 'integer', 'between:2000,2100'],
+            'year' => ['sometimes', 'integer', 'min:2000'],
             'month' => ['sometimes', 'integer', 'between:1,12'],
         ];
     }

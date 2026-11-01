@@ -29,34 +29,45 @@ const monthItems = months.map((label, i) => ({
     label,
 }));
 
+interface Props {
+    substationId: number;
+    filters: Period;
+    isLoading?: boolean;
+    maxPeriod: Period;
+    onLoadingChange?: (loading: boolean) => void;
+}
+
 export function PeriodFilter({
     substationId,
     filters,
     isLoading = false,
+    maxPeriod,
     onLoadingChange,
-}: {
-    substationId: number;
-    filters: Period;
-    isLoading?: boolean;
-    onLoadingChange?: (loading: boolean) => void;
-}) {
+}: Props) {
+    const isFutureMonth = (month: string) =>
+        filters.year === maxPeriod.year && Number(month) > maxPeriod.month;
+
     const update = (key: keyof Period, value: string) => {
-        router.get(
-            show(substationId),
-            { ...filters, [key]: Number(value) },
-            {
-                only: ['meterStats', 'totals', 'filters'],
-                preserveState: true,
-                preserveScroll: true,
-                replace: true,
-                onStart: () => onLoadingChange?.(true),
-                onFinish: () => onLoadingChange?.(false),
-            },
-        );
+        const nextPeriod = { ...filters, [key]: Number(value) };
+
+        if (
+            nextPeriod.year === maxPeriod.year &&
+            nextPeriod.month > maxPeriod.month
+        ) {
+            nextPeriod.month = maxPeriod.month;
+        }
+
+        router.get(show(substationId), nextPeriod, {
+            only: ['meterStats', 'totals', 'filters'],
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+            onStart: () => onLoadingChange?.(true),
+            onFinish: () => onLoadingChange?.(false),
+        });
     };
 
-    const currentYear = new Date().getFullYear();
-    const years = Array.from({ length: 3 }, (_, i) => currentYear - i);
+    const years = Array.from({ length: 3 }, (_, i) => maxPeriod.year - i);
 
     return (
         <div className="flex gap-2">
@@ -77,6 +88,7 @@ export function PeriodFilter({
                         <SelectItem
                             key={m.value}
                             value={m.value}
+                            disabled={isFutureMonth(m.value)}
                             data-testid={`month-option-${m.value}`}
                         >
                             {m.label}

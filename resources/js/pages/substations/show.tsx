@@ -5,18 +5,20 @@ import type { MeterStatRow, Totals } from '@/components/substations/types';
 import type { Period } from '@/types';
 import { useEffect, useState } from 'react';
 
-type Props = {
+interface Props {
     substation: { id: number; name: string };
     meterStats: MeterStatRow[];
     totals: Totals;
     filters: Period;
-};
+    limits: Period;
+}
 
 export default function Show({
     substation,
     meterStats,
     totals,
     filters,
+    limits,
 }: Props) {
     const [isLoading, setIsLoading] = useState(false);
     const [showDim, setShowDim] = useState(false);
@@ -41,6 +43,7 @@ export default function Show({
                     <PeriodFilter
                         substationId={substation.id}
                         filters={filters}
+                        maxPeriod={limits}
                         isLoading={isLoading}
                         onLoadingChange={setIsLoading}
                     />
