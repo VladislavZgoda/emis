@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\SubstationController;
+use App\Http\Controllers\SubstationMeterStatController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -19,4 +20,6 @@ Route::middleware('auth')->group(function () {
     })->name('home');
 
     Route::resource('substations', SubstationController::class)->except(['index', 'create', 'edit']);
+    Route::resource('substations.meter-stats', SubstationMeterStatController::class)
+        ->only(['store']);
 });

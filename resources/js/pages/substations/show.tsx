@@ -4,6 +4,8 @@ import { MeterStatsTable } from '@/components/substations/meter-stats-table';
 import type { MeterStatRow, Totals } from '@/components/substations/types';
 import type { Period } from '@/types';
 import { useEffect, useState } from 'react';
+import { IncrementInstalledDialog } from '@/components/substations/increment-installed-dialog';
+import type { BalanceGroupOption } from '@/components/substations/types';
 
 interface Props {
     substation: { id: number; name: string };
@@ -11,6 +13,7 @@ interface Props {
     totals: Totals;
     filters: Period;
     limits: Period;
+    balanceGroups: BalanceGroupOption[];
 }
 
 export default function Show({
@@ -19,6 +22,7 @@ export default function Show({
     totals,
     filters,
     limits,
+    balanceGroups,
 }: Props) {
     const [isLoading, setIsLoading] = useState(false);
     const [showDim, setShowDim] = useState(false);
@@ -40,13 +44,22 @@ export default function Show({
             <div className="space-y-4 p-4">
                 <div className="flex items-center justify-between">
                     <h1 className="text-xl font-semibold">{substation.name}</h1>
-                    <PeriodFilter
-                        substationId={substation.id}
-                        filters={filters}
-                        maxPeriod={limits}
-                        isLoading={isLoading}
-                        onLoadingChange={setIsLoading}
-                    />
+                    <div className="flex gap-2">
+                        <IncrementInstalledDialog
+                            substationId={substation.id}
+                            balanceGroups={balanceGroups}
+                            defaultPeriod={filters}
+                            maxPeriod={limits}
+                            disabled={isLoading}
+                        />
+                        <PeriodFilter
+                            substationId={substation.id}
+                            filters={filters}
+                            maxPeriod={limits}
+                            isLoading={isLoading}
+                            onLoadingChange={setIsLoading}
+                        />
+                    </div>
                 </div>
                 <MeterStatsTable
                     data={meterStats}

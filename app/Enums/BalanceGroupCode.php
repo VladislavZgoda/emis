@@ -29,4 +29,13 @@ enum BalanceGroupCode: string
             array_map(fn (self $case) => $case->label(), self::cases()),
         );
     }
+
+    /** @return array<int, array{code: string, label: string}> */
+    public static function toSelectItems(): array
+    {
+        return array_map(
+            fn (self $case) => ['code' => $case->value, 'label' => $case->label()],
+            self::cases(),
+        );
+    }
 }

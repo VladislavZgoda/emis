@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\BuildSubstationMeterReport;
+use App\Enums\BalanceGroupCode;
 use App\Http\Requests\ShowSubstationRequest;
 use App\Models\Substation;
 use Illuminate\Http\RedirectResponse;
@@ -57,6 +58,7 @@ class SubstationController extends Controller
                 'month' => $month,
             ],
             'limits' => ['year' => $now->year, 'month' => $now->month],
+            'balanceGroups' => BalanceGroupCode::toSelectItems(),
         ]);
     }
 
