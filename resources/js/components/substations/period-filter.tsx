@@ -7,27 +7,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { getYears, isFutureMonth, monthItems } from '@/lib/months';
 import type { Period } from '@/types';
-
-const months = [
-    'Январь',
-    'Февраль',
-    'Март',
-    'Апрель',
-    'Май',
-    'Июнь',
-    'Июль',
-    'Август',
-    'Сентябрь',
-    'Октябрь',
-    'Ноябрь',
-    'Декабрь',
-];
-
-const monthItems = months.map((label, i) => ({
-    value: String(i + 1),
-    label,
-}));
 
 interface Props {
     substationId: number;
@@ -44,16 +25,10 @@ export function PeriodFilter({
     maxPeriod,
     onLoadingChange,
 }: Props) {
-    const isFutureMonth = (month: string) =>
-        filters.year === maxPeriod.year && Number(month) > maxPeriod.month;
-
     const update = (key: keyof Period, value: string) => {
         const nextPeriod = { ...filters, [key]: Number(value) };
 
-        if (
-            nextPeriod.year === maxPeriod.year &&
-            nextPeriod.month > maxPeriod.month
-        ) {
+        if (isFutureMonth(nextPeriod.year, nextPeriod.month, maxPeriod)) {
             nextPeriod.month = maxPeriod.month;
         }
 
@@ -66,8 +41,6 @@ export function PeriodFilter({
             onFinish: () => onLoadingChange?.(false),
         });
     };
-
-    const years = Array.from({ length: 3 }, (_, i) => maxPeriod.year - i);
 
     return (
         <div className="flex gap-2">
@@ -88,7 +61,11 @@ export function PeriodFilter({
                         <SelectItem
                             key={m.value}
                             value={m.value}
-                            disabled={isFutureMonth(m.value)}
+                            disabled={isFutureMonth(
+                                filters.year,
+                                Number(m.value),
+                                maxPeriod,
+                            )}
                             data-testid={`month-option-${m.value}`}
                         >
                             {m.label}
@@ -112,7 +89,7 @@ export function PeriodFilter({
                     side="bottom"
                     className="min-w-0"
                 >
-                    {years.map((y) => (
+                    {getYears(maxPeriod.year).map((y) => (
                         <SelectItem key={y} value={String(y)}>
                             {y}
                         </SelectItem>
