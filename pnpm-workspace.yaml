@@ -1,15 +1,17 @@
 packages:
-    - '.'
+  - '.'
 
 publicHoistPattern:
-    - '@inertiajs/core'
+  - '@inertiajs/core'
 catalog:
-    vite: npm:@voidzero-dev/vite-plus-core@1.4.0
-    vite-plus: 1.4.0
+  vite: npm:@voidzero-dev/vite-plus-core@1.5.0
+  vite-plus: 1.5.0
 overrides:
-    vite@*: 'catalog:'
+  vite@*: 'catalog:'
 peerDependencyRules:
-    allowAny:
-        - vite
-    allowedVersions:
-        vite: '*'
+  allowAny:
+    - vite
+  allowedVersions:
+    vite: '*'
+minimumReleaseAgeExclude:
+  - playwright-core@1.65.0
