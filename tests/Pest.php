@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\BalanceGroupCode;
+use App\Models\BalanceGroup;
 use App\Models\Substation;
 use App\Models\SubstationMeterStat;
 use App\Models\User;
@@ -66,7 +67,15 @@ function loginThroughBrowser(PendingAwaitablePage $page, User $user, string $pas
 {
     return $page->type('input[name=username]', $user->username)
         ->type('input[name=password]', $password)
-        ->pressAndWaitFor('Войти', 2);
+        ->press('Войти')
+        ->assertPathIsNot('/login');
+}
+
+function openSubstationPage(Substation $substation, User $user, int $year, int $month)
+{
+    return loginThroughBrowser(visit('/login'), $user)
+        ->navigate(route('substations.show', compact('substation', 'year', 'month')))
+        ->assertSee($substation->name);
 }
 
 function seedBalanceGroups(): void
@@ -87,4 +96,27 @@ function addMeterStat(
         ->forGroup($code)
         ->forPeriod($year, $month)
         ->create(['meters_total' => $total, 'meters_installed' => $installed]);
+}
+
+function findMeterStat(
+    Substation $substation,
+    int $month,
+    BalanceGroupCode $code = BalanceGroupCode::Household,
+    int $year = 2026,
+): ?SubstationMeterStat {
+    return $substation->meterStats()
+        ->whereBelongsTo(BalanceGroup::where('code', $code->value)->firstOrFail())
+        ->where('year', $year)
+        ->where('month', $month)
+        ->first();
+}
+
+function storePayload(array $override = []): array
+{
+    return array_merge([
+        'balance_group' => 'household',
+        'year' => 2026,
+        'month' => 6,
+        'amount' => 5,
+    ], $override);
 }

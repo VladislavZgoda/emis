@@ -121,6 +121,7 @@ function IncrementInstalledForm({
                                     <SelectItem
                                         key={group.value}
                                         value={group.value}
+                                        data-testid={`group-option-${group.value}`}
                                     >
                                         {group.label}
                                     </SelectItem>
