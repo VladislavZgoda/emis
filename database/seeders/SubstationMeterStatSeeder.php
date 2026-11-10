@@ -10,9 +10,6 @@ use Illuminate\Database\Seeder;
 
 class SubstationMeterStatSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $codes = BalanceGroupCode::cases();
@@ -20,27 +17,35 @@ class SubstationMeterStatSeeder extends Seeder
         $groupIds = BalanceGroup::whereIn('code', array_column($codes, 'value'))
             ->pluck('id', 'code');
 
-        foreach (Substation::all() as $substation) {
-            foreach (range(1, 6) as $monthsAgo) {
-                $date = now()->startOfMonth()->subMonths($monthsAgo);
+        $months = collect(range(6, 1))
+            ->map(fn (int $monthsAgo) => now()->startOfMonth()->subMonths($monthsAgo));
 
-                foreach ($codes as $code) {
-                    $total = fake()->numberBetween(10, 100);
+        Substation::query()->each(function (Substation $substation) use ($codes, $groupIds, $months) {
+            $rows = [];
 
-                    SubstationMeterStat::firstOrCreate(
-                        [
-                            'substation_id' => $substation->id,
-                            'balance_group_id' => $groupIds[$code->value],
-                            'year' => (int) $date->year,
-                            'month' => (int) $date->month,
-                        ],
-                        [
-                            'meters_total' => $total,
-                            'meters_installed' => fake()->numberBetween(0, $total),
-                        ],
-                    );
+            foreach ($codes as $code) {
+                $total = fake()->numberBetween(10, 100);
+
+                foreach ($months as $date) {
+                    $installed = fake()->numberBetween(0, 10);
+                    $total += $installed;
+
+                    $rows[] = [
+                        'substation_id' => $substation->id,
+                        'balance_group_id' => $groupIds[$code->value],
+                        'year' => $date->year,
+                        'month' => $date->month,
+                        'meters_total' => $total,
+                        'meters_installed' => $installed,
+                    ];
                 }
             }
-        }
+
+            SubstationMeterStat::upsert(
+                $rows,
+                ['substation_id', 'balance_group_id', 'year', 'month'],
+                ['meters_total', 'meters_installed'],
+            );
+        });
     }
 }
