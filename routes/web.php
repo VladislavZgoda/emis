@@ -19,7 +19,12 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('home');
     })->name('home');
 
-    Route::resource('substations', SubstationController::class)->except(['index', 'create', 'edit']);
+    Route::resource('substations', SubstationController::class)
+        ->except(['index', 'create', 'edit']);
+
     Route::resource('substations.meter-stats', SubstationMeterStatController::class)
         ->only(['store']);
+
+    Route::put('substations/{substation}/meter-stats', [SubstationMeterStatController::class, 'update'])
+        ->name('substations.meter-stats.update');
 });

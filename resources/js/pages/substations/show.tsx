@@ -62,6 +62,9 @@ export default function Show({
                     </div>
                 </div>
                 <MeterStatsTable
+                    substationId={substation.id}
+                    year={filters.year}
+                    month={filters.month}
                     data={meterStats}
                     totals={totals}
                     isLoading={showDim}

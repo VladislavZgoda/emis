@@ -11,7 +11,7 @@ use RuntimeException;
 class BuildSubstationMeterReport
 {
     /**
-     * @return Collection<int, array{balance_group: string, meters_total: int, meters_installed: int}>
+     * @return Collection<int, array{code: string, balance_group: string, meters_total: int, meters_installed: int}>
      */
     public function __invoke(Substation $substation, int $year, int $month): Collection
     {
@@ -43,6 +43,7 @@ class BuildSubstationMeterReport
                     && (int) $stat->month === $month;
 
                 return [
+                    'code' => $code->value,
                     'balance_group' => $code->label(),
                     'meters_total' => $stat->meters_total ?? 0,
                     'meters_installed' => $isCurrentPeriod ? $stat->meters_installed : 0,

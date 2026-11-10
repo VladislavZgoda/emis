@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Actions\RecordMeterInstallations;
+use App\Actions\UpdateMeterStat;
 use App\Enums\BalanceGroupCode;
 use App\Http\Requests\StoreSubstationMeterStatRequest;
+use App\Http\Requests\UpdateSubstationMeterStatRequest;
 use App\Models\Substation;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class SubstationMeterStatController extends Controller
 {
@@ -67,9 +68,23 @@ class SubstationMeterStatController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(
+        UpdateSubstationMeterStatRequest $request,
+        Substation $substation,
+        UpdateMeterStat $update,
+    ): RedirectResponse {
+        $validated = $request->validated();
+
+        $update(
+            $substation,
+            BalanceGroupCode::from($validated['balance_group']),
+            $validated['year'],
+            $validated['month'],
+            $validated['meters_total'],
+            $validated['meters_installed'],
+        );
+
+        return back();
     }
 
     /**
