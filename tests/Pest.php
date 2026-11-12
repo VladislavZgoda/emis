@@ -5,6 +5,7 @@ use App\Models\BalanceGroup;
 use App\Models\Substation;
 use App\Models\SubstationMeterStat;
 use App\Models\User;
+use Database\Factories\UserFactory;
 use Database\Seeders\BalanceGroupSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Pest\Browser\Api\AwaitableWebpage;
@@ -63,7 +64,7 @@ function signIn(?User $user = null)
  * Выполняет вход в систему через браузер.
  * Принимает УЖЕ СОЗДАННУЮ страницу.
  */
-function loginThroughBrowser(PendingAwaitablePage $page, User $user, string $password = '12345'): AwaitableWebpage
+function loginThroughBrowser(PendingAwaitablePage $page, User $user, string $password = UserFactory::PASSWORD): AwaitableWebpage
 {
     return $page->type('input[name=username]', $user->username)
         ->type('input[name=password]', $password)
@@ -118,5 +119,16 @@ function storePayload(array $override = []): array
         'year' => 2026,
         'month' => 6,
         'amount' => 5,
+    ], $override);
+}
+
+function updatePayload(array $override = []): array
+{
+    return array_merge([
+        'balance_group' => 'household',
+        'year' => 2026,
+        'month' => 3,
+        'meters_total' => 100,
+        'meters_installed' => 10,
     ], $override);
 }

@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Hash;
  */
 class UserFactory extends Factory
 {
+    public const PASSWORD = 'password';
+
     /**
      * The current password being used by the factory.
      */
@@ -25,7 +27,7 @@ class UserFactory extends Factory
     {
         return [
             'username' => fake()->unique()->userName(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => static::$password ??= Hash::make(self::PASSWORD),
         ];
     }
 }
