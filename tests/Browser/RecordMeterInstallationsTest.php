@@ -8,7 +8,7 @@ use App\Models\User;
 beforeEach(function () {
     seedBalanceGroups();
 
-    $this->user = User::factory()->create(['password' => '12345']);
+    $this->user = User::factory()->create();
     $this->substation = Substation::factory()->create(['name' => 'ТП-1']);
     $this->year = now()->year - 1;
 });

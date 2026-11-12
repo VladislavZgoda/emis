@@ -4,7 +4,7 @@ use App\Models\Substation;
 use App\Models\User;
 
 beforeEach(function () {
-    $user = User::factory()->create(['password' => '12345']);
+    $user = User::factory()->create();
     $this->user = $user;
 });
 

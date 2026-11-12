@@ -6,7 +6,7 @@ use App\Models\User;
 
 beforeEach(function () {
     seedBalanceGroups();
-    $this->user = User::factory()->create(['password' => '12345']);
+    $this->user = User::factory()->create();
     $this->substation = Substation::factory()->create(['name' => 'ТП-1']);
 
     addMeterStat($this->substation, BalanceGroupCode::Household, 2026, 3, total: 100, installed: 7);
